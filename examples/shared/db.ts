@@ -16,7 +16,7 @@ export function openDb(project: string, { fresh = false, ...options }: { fresh?:
 }
 
 /** Wait until the background optimizer has indexed (HNSW) at least `fraction` of the points. */
-export async function waitForIndex(col: { info(): { points_count: number; indexed_vectors_count: number } }, fraction = 0.9, timeoutMs = 300_000) {
+export async function waitForIndex<I extends { points_count: number; indexed_vectors_count: number }>(col: { info(): I }, fraction = 0.9, timeoutMs = 300_000): Promise<I> {
   const start = Date.now()
   for (;;) {
     const info = col.info()

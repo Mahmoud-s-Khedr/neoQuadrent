@@ -2,8 +2,8 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 export const EXAMPLES_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
-/** Everything downloaded or generated at runtime (gitignored). */
-export const DATA_DIR = path.join(EXAMPLES_DIR, '.data')
+/** Everything downloaded or generated at runtime (gitignored). `EXAMPLES_DATA_DIR` overrides it. */
+export const DATA_DIR = process.env.EXAMPLES_DATA_DIR ? path.resolve(process.env.EXAMPLES_DATA_DIR) : path.join(EXAMPLES_DIR, '.data')
 export const MODELS_DIR = path.join(DATA_DIR, 'models')
 export const DATASETS_DIR = path.join(DATA_DIR, 'datasets')
 export const DB_DIR = path.join(DATA_DIR, 'db')

@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process'
 import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
-import sharp from 'sharp'
+import sharp, { type Sharp } from 'sharp'
 import { embedImages } from '../shared/embed.ts'
 import { DATASETS_DIR, QUICK } from '../shared/paths.ts'
 
@@ -47,7 +47,7 @@ async function ensureDataset() {
   execFileSync('tar', ['-xzf', tgz, '-C', DIR])
 }
 
-const AUGMENTATIONS: [string, (img: sharp.Sharp, w: number, h: number) => sharp.Sharp][] = [
+const AUGMENTATIONS: [string, (img: Sharp, w: number, h: number) => Sharp][] = [
   ['crop 85% + resize', (img, w, h) => img.extract({ left: Math.round(w * 0.075), top: Math.round(h * 0.075), width: Math.round(w * 0.85), height: Math.round(h * 0.85) }).resize(w, h)],
   ['jpeg quality 25', (img) => img.jpeg({ quality: 25 })],
   ['horizontal flip', (img) => img.flop()],

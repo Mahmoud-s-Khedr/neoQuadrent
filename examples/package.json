@@ -11,6 +11,8 @@
     "spike": "tsx shared/spike.ts",
     "p1": "tsx 01-notes-search/experiment.ts",
     "p1:search": "tsx 01-notes-search/search.ts",
+    "p2": "tsx 02-image-similarity/experiment.ts",
+    "p2:prepare": "tsx 02-image-similarity/prepare.ts",
     "p3": "tsx 03-duplicate-questions/experiment.ts",
     "p5": "tsx 05-hybrid-docs/experiment.ts",
     "p5:prepare": "tsx 05-hybrid-docs/prepare.ts"
