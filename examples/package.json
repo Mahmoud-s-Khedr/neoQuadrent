@@ -19,6 +19,7 @@
     "@huggingface/transformers": "^4.3.1",
     "hyparquet": "^1.31.4",
     "neoquadrant": "file:../bindings/node",
+    "sharp": "^0.35.5",
     "unpdf": "^1.8.1"
   },
   "devDependencies": {
