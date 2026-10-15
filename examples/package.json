@@ -11,12 +11,15 @@
     "spike": "tsx shared/spike.ts",
     "p1": "tsx 01-notes-search/experiment.ts",
     "p1:search": "tsx 01-notes-search/search.ts",
-    "p3": "tsx 03-duplicate-questions/experiment.ts"
+    "p3": "tsx 03-duplicate-questions/experiment.ts",
+    "p5": "tsx 05-hybrid-docs/experiment.ts",
+    "p5:prepare": "tsx 05-hybrid-docs/prepare.ts"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.3.1",
     "hyparquet": "^1.31.4",
-    "neoquadrant": "file:../bindings/node"
+    "neoquadrant": "file:../bindings/node",
+    "unpdf": "^1.8.1"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
