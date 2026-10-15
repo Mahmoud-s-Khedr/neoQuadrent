@@ -16,6 +16,12 @@ const PROJECTS = [
   { id: 'p5', name: '05-hybrid-docs' },
 ]
 const only = flag('only')?.split(',')
+const unknown = only?.filter((o) => !PROJECTS.some((p) => p.id === o || p.name === o)) ?? []
+if (unknown.length > 0 || only?.length === 0) {
+  // A typo must not turn into "0 projects run, all passed".
+  console.error(`unknown project(s) in --only: ${unknown.join(', ') || '(empty)'}; expected ${PROJECTS.map((p) => p.id).join(', ')}`)
+  process.exit(2)
+}
 const selected = PROJECTS.filter((p) => !only || only.includes(p.id) || only.includes(p.name))
 const resultsDir = path.join(DATA_DIR, 'results')
 

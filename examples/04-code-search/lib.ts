@@ -138,11 +138,15 @@ export interface SyncStats {
 
 const fileFilter = (repo: string, file: string): Filter => ({ must: [{ key: 'repo', match: { value: repo } }, { key: 'file', match: { value: file } }] })
 
-/** Point id of a chunk: content-addressed, so unchanged chunks keep their id (and embedding). */
+/**
+ * Point id of a chunk: content-addressed, so unchanged chunks keep their id (and embedding).
+ * The kind and qualified name are part of it because the embedded text includes them: renaming
+ * a class changes its methods' names (`Old.m` → `New.m`) without changing their text.
+ */
 export function chunkIds(repo: string, chunks: CodeChunk[]): string[] {
   const seen = new Map<string, number>()
   return chunks.map((c) => {
-    const h = crypto.createHash('sha1').update(c.text).digest('hex')
+    const h = crypto.createHash('sha1').update(`${c.kind}\0${c.name}\0${c.text}`).digest('hex')
     const n = seen.get(h) ?? 0
     seen.set(h, n + 1)
     return uuidV5(`${repo}\0${c.path}\0${h}\0${n}`)
@@ -168,7 +172,10 @@ function scrollAll(col: Collection, filter: Filter, with_payload: string[]): { i
 export async function syncRepo(code: Collection, meta: Collection, repo: RepoSpec, embedder: Embedder = defaultEmbedder): Promise<SyncStats> {
   const t0 = performance.now()
   const metaId = uuidV5(`repo:${repo.name}`)
-  const last = (meta.retrieve([metaId])[0]?.payload?.commit as string | undefined) ?? null
+  const state = meta.retrieve([metaId])[0]?.payload
+  // What was indexed, not just where: a commit indexed with other paths (e.g. --quick) is not reusable.
+  const scope = JSON.stringify({ include: repo.include, exclude: repo.exclude?.source ?? null })
+  const last = state?.scope === scope ? ((state.commit as string | undefined) ?? null) : null
   const to = head(repo)
   const stats: SyncStats = { repo: repo.name, mode: 'full', from: last, to, files_indexed: 0, files_deleted: 0, chunks_embedded: 0, chunks_kept: 0, chunks_deleted: 0, chunks_total: 0, seconds: 0 }
 
@@ -181,7 +188,8 @@ export async function syncRepo(code: Collection, meta: Collection, repo: RepoSpe
     stats.mode = 'incremental'
     ;({ changed, deleted } = diff(repo, last, to))
   } else {
-    // First sync, or the last indexed commit is gone (history rewritten): start over.
+    // First sync, the indexed paths changed, or the last indexed commit is gone (history
+    // rewritten): start over.
     code.delete({ filter: { must: [{ key: 'repo', match: { value: repo.name } }] } })
     changed = listFiles(repo, to)
   }
@@ -223,7 +231,7 @@ export async function syncRepo(code: Collection, meta: Collection, repo: RepoSpe
 
   stats.chunks_total = code.count({ filter: { must: [{ key: 'repo', match: { value: repo.name } }] }, exact: true })
   // Record the commit only after its chunks are written: a crash before this line re-syncs from `last`.
-  meta.upsert([{ id: metaId, vector: {}, payload: { repo: repo.name, commit: to, chunks: stats.chunks_total, synced_at: new Date().toISOString() } }])
+  meta.upsert([{ id: metaId, vector: {}, payload: { repo: repo.name, commit: to, scope, chunks: stats.chunks_total, synced_at: new Date().toISOString() } }])
   stats.seconds = (performance.now() - t0) / 1000
   return stats
 }
