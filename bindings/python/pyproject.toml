@@ -1,0 +1,19 @@
+[build-system]
+requires = ["maturin>=1.7,<2"]
+build-backend = "maturin"
+
+[project]
+name = "neoquadrant"
+version = "0.1.0"
+description = "Embedded Qdrant: in-process vector search for Python, no server"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.9"
+keywords = ["qdrant", "vector", "database", "embedded", "hnsw", "embeddings"]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "numpy"]
+
+[tool.maturin]
+python-source = "python"
+module-name = "neoquadrant._native"
+features = ["pyo3/extension-module"]

@@ -1,0 +1,1184 @@
+{
+  "_comment": "Shared behaviour spec. Every binding (Rust, Node, Python) runs these cases and must produce identical results. Each case starts with a fresh temporary database and one collection named `c`. Error codes: engine, invalid_argument, not_found, exists, closed.",
+  "cases": [
+    {
+      "name": "nearest neighbours, cosine",
+      "config": {
+        "vectors": {
+          "size": 3,
+          "distance": "Cosine"
+        }
+      },
+      "steps": [
+        {
+          "op": "upsert",
+          "args": [
+            {
+              "id": 1,
+              "vector": [
+                1,
+                0,
+                0
+              ]
+            },
+            {
+              "id": 2,
+              "vector": [
+                0.8,
+                0.2,
+                0
+              ]
+            },
+            {
+              "id": 3,
+              "vector": [
+                0,
+                0,
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "query": [
+              1,
+              0,
+              0
+            ],
+            "limit": 2
+          },
+          "expect_ids": [
+            1,
+            2
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "query": {
+              "nearest": [
+                0,
+                0,
+                1
+              ]
+            },
+            "limit": 1
+          },
+          "expect_ids": [
+            3
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "query": [
+              1,
+              0,
+              0
+            ],
+            "limit": 10,
+            "offset": 2
+          },
+          "expect_ids": [
+            3
+          ]
+        },
+        {
+          "op": "count",
+          "args": {},
+          "expect": 3
+        }
+      ]
+    },
+    {
+      "name": "euclid returns distances, dot returns raw scores",
+      "config": {
+        "vectors": {
+          "l2": {
+            "size": 2,
+            "distance": "Euclid"
+          },
+          "ip": {
+            "size": 2,
+            "distance": "Dot"
+          }
+        }
+      },
+      "steps": [
+        {
+          "op": "upsert",
+          "args": [
+            {
+              "id": 1,
+              "vector": {
+                "l2": [
+                  0,
+                  0
+                ],
+                "ip": [
+                  2,
+                  3
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "query": [
+              3,
+              4
+            ],
+            "using": "l2"
+          },
+          "expect_scores": [
+            5.0
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "query": [
+              1,
+              1
+            ],
+            "using": "ip"
+          },
+          "expect_scores": [
+            5.0
+          ]
+        }
+      ]
+    },
+    {
+      "name": "filters: match, range, any, except, nested, should, must_not, has_id",
+      "config": {
+        "vectors": {
+          "size": 2,
+          "distance": "Dot"
+        }
+      },
+      "steps": [
+        {
+          "op": "upsert",
+          "args": [
+            {
+              "id": 1,
+              "vector": [
+                1,
+                0
+              ],
+              "payload": {
+                "city": "London",
+                "price": 10,
+                "tags": [
+                  "a",
+                  "b"
+                ],
+                "meta": {
+                  "stars": 5
+                }
+              }
+            },
+            {
+              "id": 2,
+              "vector": [
+                1,
+                0
+              ],
+              "payload": {
+                "city": "Paris",
+                "price": 20,
+                "tags": [
+                  "b"
+                ],
+                "meta": {
+                  "stars": 3
+                }
+              }
+            },
+            {
+              "id": 3,
+              "vector": [
+                1,
+                0
+              ],
+              "payload": {
+                "city": "Berlin",
+                "price": 30,
+                "tags": [],
+                "meta": {
+                  "stars": 4
+                }
+              }
+            },
+            {
+              "id": 4,
+              "vector": [
+                1,
+                0
+              ],
+              "payload": {
+                "city": "London",
+                "price": 40
+              }
+            }
+          ]
+        },
+        {
+          "op": "count",
+          "args": {
+            "filter": {
+              "must": [
+                {
+                  "key": "city",
+                  "match": {
+                    "value": "London"
+                  }
+                }
+              ]
+            }
+          },
+          "expect": 2
+        },
+        {
+          "op": "count",
+          "args": {
+            "filter": {
+              "must": [
+                {
+                  "key": "price",
+                  "range": {
+                    "gt": 10,
+                    "lte": 30
+                  }
+                }
+              ]
+            }
+          },
+          "expect": 2
+        },
+        {
+          "op": "count",
+          "args": {
+            "filter": {
+              "must": [
+                {
+                  "key": "city",
+                  "match": {
+                    "any": [
+                      "Paris",
+                      "Berlin"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "expect": 2
+        },
+        {
+          "op": "count",
+          "args": {
+            "filter": {
+              "must": [
+                {
+                  "key": "city",
+                  "match": {
+                    "except": [
+                      "London"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "expect": 2
+        },
+        {
+          "op": "count",
+          "args": {
+            "filter": {
+              "must": [
+                {
+                  "key": "tags",
+                  "match": {
+                    "value": "b"
+                  }
+                }
+              ]
+            }
+          },
+          "expect": 2
+        },
+        {
+          "op": "count",
+          "args": {
+            "filter": {
+              "must": [
+                {
+                  "key": "meta.stars",
+                  "range": {
+                    "gte": 4
+                  }
+                }
+              ]
+            }
+          },
+          "expect": 2
+        },
+        {
+          "op": "count",
+          "args": {
+            "filter": {
+              "should": [
+                {
+                  "key": "city",
+                  "match": {
+                    "value": "Paris"
+                  }
+                },
+                {
+                  "has_id": [
+                    3
+                  ]
+                }
+              ]
+            }
+          },
+          "expect": 2
+        },
+        {
+          "op": "count",
+          "args": {
+            "filter": {
+              "must_not": [
+                {
+                  "key": "city",
+                  "match": {
+                    "value": "London"
+                  }
+                }
+              ]
+            }
+          },
+          "expect": 2
+        },
+        {
+          "op": "count",
+          "args": {
+            "filter": {
+              "must": [
+                {
+                  "is_empty": {
+                    "key": "tags"
+                  }
+                }
+              ]
+            }
+          },
+          "expect": 2
+        },
+        {
+          "op": "scroll",
+          "args": {
+            "filter": {
+              "must": [
+                {
+                  "has_id": [
+                    4,
+                    2
+                  ]
+                }
+              ]
+            }
+          },
+          "expect_ids": [
+            2,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "name": "upsert replaces, delete by id and filter",
+      "config": {
+        "vectors": {
+          "size": 2,
+          "distance": "Dot"
+        }
+      },
+      "steps": [
+        {
+          "op": "upsert",
+          "args": [
+            {
+              "id": 1,
+              "vector": [
+                1,
+                0
+              ],
+              "payload": {
+                "v": 1
+              }
+            },
+            {
+              "id": 2,
+              "vector": [
+                0,
+                1
+              ],
+              "payload": {
+                "v": 2
+              }
+            }
+          ]
+        },
+        {
+          "op": "upsert",
+          "args": [
+            {
+              "id": 1,
+              "vector": [
+                0,
+                1
+              ],
+              "payload": {
+                "v": 3
+              }
+            }
+          ]
+        },
+        {
+          "op": "retrieve",
+          "args": {
+            "ids": [
+              1
+            ]
+          },
+          "expect_payloads": [
+            {
+              "v": 3
+            }
+          ]
+        },
+        {
+          "op": "count",
+          "args": {},
+          "expect": 2
+        },
+        {
+          "op": "delete",
+          "args": {
+            "points": [
+              2
+            ]
+          }
+        },
+        {
+          "op": "count",
+          "args": {},
+          "expect": 1
+        },
+        {
+          "op": "delete",
+          "args": {
+            "filter": {
+              "must": [
+                {
+                  "key": "v",
+                  "match": {
+                    "value": 3
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "op": "count",
+          "args": {},
+          "expect": 0
+        }
+      ]
+    },
+    {
+      "name": "payload operations",
+      "config": {
+        "vectors": {
+          "size": 2,
+          "distance": "Dot"
+        }
+      },
+      "steps": [
+        {
+          "op": "upsert",
+          "args": [
+            {
+              "id": 1,
+              "vector": [
+                1,
+                0
+              ],
+              "payload": {
+                "a": 1,
+                "b": 2
+              }
+            },
+            {
+              "id": 2,
+              "vector": [
+                0,
+                1
+              ],
+              "payload": {
+                "a": 1
+              }
+            }
+          ]
+        },
+        {
+          "op": "set_payload",
+          "args": {
+            "payload": {
+              "c": 3
+            },
+            "points": [
+              1
+            ]
+          }
+        },
+        {
+          "op": "retrieve",
+          "args": {
+            "ids": [
+              1
+            ]
+          },
+          "expect_payloads": [
+            {
+              "a": 1,
+              "b": 2,
+              "c": 3
+            }
+          ]
+        },
+        {
+          "op": "delete_payload",
+          "args": {
+            "keys": [
+              "a"
+            ],
+            "filter": {
+              "must": [
+                {
+                  "key": "a",
+                  "match": {
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "op": "retrieve",
+          "args": {
+            "ids": [
+              1,
+              2
+            ]
+          },
+          "expect_payloads": [
+            {
+              "b": 2,
+              "c": 3
+            },
+            {}
+          ]
+        },
+        {
+          "op": "overwrite_payload",
+          "args": {
+            "payload": {
+              "z": true
+            },
+            "points": [
+              1
+            ]
+          }
+        },
+        {
+          "op": "retrieve",
+          "args": {
+            "ids": [
+              1
+            ]
+          },
+          "expect_payloads": [
+            {
+              "z": true
+            }
+          ]
+        },
+        {
+          "op": "clear_payload",
+          "args": {
+            "points": [
+              1
+            ]
+          }
+        },
+        {
+          "op": "retrieve",
+          "args": {
+            "ids": [
+              1
+            ]
+          },
+          "expect_payloads": [
+            {}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "string (uuid) and integer ids, scroll pagination",
+      "config": {
+        "vectors": {
+          "size": 1,
+          "distance": "Dot"
+        }
+      },
+      "steps": [
+        {
+          "op": "upsert",
+          "args": [
+            {
+              "id": 3,
+              "vector": [
+                1
+              ]
+            },
+            {
+              "id": 1,
+              "vector": [
+                1
+              ]
+            },
+            {
+              "id": 2,
+              "vector": [
+                1
+              ]
+            },
+            {
+              "id": "00000000-0000-0000-0000-000000000001",
+              "vector": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "op": "scroll",
+          "args": {
+            "limit": 2
+          },
+          "expect_ids": [
+            1,
+            2
+          ],
+          "expect_next": 3
+        },
+        {
+          "op": "scroll",
+          "args": {
+            "limit": 10,
+            "offset": 3
+          },
+          "expect_ids": [
+            3,
+            "00000000-0000-0000-0000-000000000001"
+          ],
+          "expect_next": null
+        }
+      ]
+    },
+    {
+      "name": "payload index, facet, order_by",
+      "config": {
+        "vectors": {
+          "size": 1,
+          "distance": "Dot"
+        }
+      },
+      "steps": [
+        {
+          "op": "create_payload_index",
+          "args": {
+            "field_name": "color",
+            "field_schema": "keyword"
+          }
+        },
+        {
+          "op": "create_payload_index",
+          "args": {
+            "field_name": "rank",
+            "field_schema": "integer"
+          }
+        },
+        {
+          "op": "upsert",
+          "args": [
+            {
+              "id": 1,
+              "vector": [
+                1
+              ],
+              "payload": {
+                "color": "red",
+                "rank": 3
+              }
+            },
+            {
+              "id": 2,
+              "vector": [
+                1
+              ],
+              "payload": {
+                "color": "red",
+                "rank": 1
+              }
+            },
+            {
+              "id": 3,
+              "vector": [
+                1
+              ],
+              "payload": {
+                "color": "blue",
+                "rank": 2
+              }
+            }
+          ]
+        },
+        {
+          "op": "facet",
+          "args": {
+            "key": "color"
+          },
+          "expect": [
+            {
+              "value": "red",
+              "count": 2
+            },
+            {
+              "value": "blue",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "op": "scroll",
+          "args": {
+            "order_by": {
+              "key": "rank",
+              "direction": "desc"
+            }
+          },
+          "expect_ids": [
+            1,
+            3,
+            2
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "query": {
+              "order_by": "rank"
+            },
+            "limit": 2
+          },
+          "expect_ids": [
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "name": "hybrid dense + sparse with rrf",
+      "config": {
+        "vectors": {
+          "dense": {
+            "size": 2,
+            "distance": "Cosine"
+          }
+        },
+        "sparse_vectors": {
+          "text": {}
+        }
+      },
+      "steps": [
+        {
+          "op": "upsert",
+          "args": [
+            {
+              "id": 1,
+              "vector": {
+                "dense": [
+                  1,
+                  0
+                ],
+                "text": {
+                  "indices": [
+                    5
+                  ],
+                  "values": [
+                    1.0
+                  ]
+                }
+              }
+            },
+            {
+              "id": 2,
+              "vector": {
+                "dense": [
+                  0,
+                  1
+                ],
+                "text": {
+                  "indices": [
+                    5
+                  ],
+                  "values": [
+                    3.0
+                  ]
+                }
+              }
+            },
+            {
+              "id": 3,
+              "vector": {
+                "dense": [
+                  0.9,
+                  0.1
+                ],
+                "text": {
+                  "indices": [
+                    9
+                  ],
+                  "values": [
+                    1.0
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "query": {
+              "indices": [
+                5
+              ],
+              "values": [
+                1.0
+              ]
+            },
+            "using": "text"
+          },
+          "expect_ids": [
+            2,
+            1
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "prefetch": [
+              {
+                "query": [
+                  1,
+                  0
+                ],
+                "using": "dense",
+                "limit": 2
+              },
+              {
+                "query": {
+                  "indices": [
+                    5
+                  ],
+                  "values": [
+                    1.0
+                  ]
+                },
+                "using": "text",
+                "limit": 2
+              }
+            ],
+            "query": {
+              "fusion": "rrf"
+            },
+            "limit": 1
+          },
+          "expect_ids": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "multivector, scalar quantization, on-disk storage",
+      "config": {
+        "vectors": {
+          "colbert": {
+            "size": 2,
+            "distance": "Cosine",
+            "multivector_config": {
+              "comparator": "max_sim"
+            }
+          },
+          "q": {
+            "size": 4,
+            "distance": "Dot",
+            "memory": "cold",
+            "quantization_config": {
+              "scalar": {
+                "type": "int8",
+                "always_ram": true
+              }
+            }
+          }
+        },
+        "on_disk_payload": true,
+        "optimizers_config": {
+          "indexing_threshold": 0
+        }
+      },
+      "steps": [
+        {
+          "op": "upsert",
+          "args": [
+            {
+              "id": 1,
+              "vector": {
+                "colbert": [
+                  [
+                    1,
+                    0
+                  ],
+                  [
+                    0.9,
+                    0.1
+                  ]
+                ],
+                "q": [
+                  1,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "payload": {
+                "n": 1
+              }
+            },
+            {
+              "id": 2,
+              "vector": {
+                "colbert": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    0.1,
+                    0.9
+                  ]
+                ],
+                "q": [
+                  0,
+                  1,
+                  0,
+                  0
+                ]
+              },
+              "payload": {
+                "n": 2
+              }
+            },
+            {
+              "id": 3,
+              "vector": {
+                "colbert": [
+                  [
+                    0.7,
+                    0.7
+                  ]
+                ],
+                "q": [
+                  0.5,
+                  0.5,
+                  0,
+                  0
+                ]
+              },
+              "payload": {
+                "n": 3
+              }
+            }
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "query": [
+              [
+                1,
+                0
+              ]
+            ],
+            "using": "colbert",
+            "limit": 3
+          },
+          "expect_ids": [
+            1,
+            3,
+            2
+          ]
+        },
+        {
+          "op": "optimize"
+        },
+        {
+          "op": "query",
+          "args": {
+            "query": [
+              1,
+              0.1,
+              0,
+              0
+            ],
+            "using": "q",
+            "limit": 2,
+            "params": {
+              "quantization": {
+                "rescore": true
+              }
+            }
+          },
+          "expect_ids": [
+            1,
+            3
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "query": [
+              [
+                0,
+                1
+              ]
+            ],
+            "using": "colbert",
+            "limit": 1
+          },
+          "expect_ids": [
+            2
+          ]
+        },
+        {
+          "op": "retrieve",
+          "args": {
+            "ids": [
+              3
+            ]
+          },
+          "expect_payloads": [
+            {
+              "n": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "errors",
+      "config": {
+        "vectors": {
+          "size": 2,
+          "distance": "Dot"
+        }
+      },
+      "steps": [
+        {
+          "op": "upsert",
+          "args": [
+            {
+              "id": 1,
+              "vector": [
+                1,
+                2,
+                3
+              ]
+            }
+          ],
+          "expect_error": "engine"
+        },
+        {
+          "op": "query",
+          "args": {
+            "query": [
+              1,
+              0
+            ],
+            "using": "missing"
+          },
+          "expect_error": "invalid_argument"
+        },
+        {
+          "op": "query",
+          "args": {
+            "query": [
+              1,
+              0
+            ],
+            "filter": {
+              "must": [
+                {
+                  "key": "x",
+                  "matchh": {
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          },
+          "expect_error": "invalid_argument"
+        },
+        {
+          "op": "delete_payload",
+          "args": {
+            "keys": [
+              "a"
+            ]
+          },
+          "expect_error": "invalid_argument"
+        },
+        {
+          "op": "create_collection_again",
+          "expect_error": "exists"
+        }
+      ]
+    }
+  ]
+}

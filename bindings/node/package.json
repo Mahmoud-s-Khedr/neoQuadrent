@@ -1,0 +1,16 @@
+{
+  "name": "neoquadrant",
+  "version": "0.1.0",
+  "description": "Embedded Qdrant: in-process vector search for Node.js, no server",
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": ["index.js", "index.d.ts", "*.node"],
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build": "node build.js",
+    "build:debug": "node build.js --debug",
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": ["qdrant", "vector", "database", "embedded", "hnsw", "search", "embeddings"]
+}
