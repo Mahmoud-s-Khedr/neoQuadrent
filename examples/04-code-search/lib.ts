@@ -3,6 +3,7 @@
 // incrementally from `git diff` against the last indexed commit (stored in a `meta` collection).
 import { execFileSync } from 'node:child_process'
 import crypto from 'node:crypto'
+import { createRequire } from 'node:module'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -128,13 +129,17 @@ export const defaultEmbedder: Embedder = { nl: (t) => embedPassages(t, 16), code
 /**
  * Fingerprint of everything that shapes the stored chunks and vectors: the models, the source of
  * the chunker, of this file (the embedded text) and of shared/embed.ts (dtype, pooling, query
- * prefix), and the transformers.js version. Any change forces a full rebuild instead of mixing
+ * prefix), and the transformers.js, web-tree-sitter and tree-sitter-wasms versions. Any change forces a full rebuild instead of mixing
  * old vectors with a new query embedder or chunker.
  */
 let pipeline: string | undefined
 export function pipelineVersion(): string {
   if (pipeline) return pipeline
-  const h = crypto.createHash('sha1').update(JSON.stringify([MODELS.text, MODELS.code, MAX_EMBED_CHARS, TRANSFORMERS_VERSION]))
+  // Installed parser and grammar versions: an upgrade can change the chunks of unchanged files.
+  const require = createRequire(import.meta.url)
+  const version = (entry: string) => JSON.parse(fs.readFileSync(path.join(path.dirname(require.resolve(entry)), 'package.json'), 'utf8')).version
+  const parsers = [version('web-tree-sitter'), version('tree-sitter-wasms/package.json')]
+  const h = crypto.createHash('sha1').update(JSON.stringify([MODELS.text, MODELS.code, MAX_EMBED_CHARS, TRANSFORMERS_VERSION, parsers]))
   for (const f of ['chunk.ts', 'lib.ts', '../shared/embed.ts']) h.update(fs.readFileSync(path.join(HERE, f)))
   return (pipeline = h.digest('hex').slice(0, 16))
 }

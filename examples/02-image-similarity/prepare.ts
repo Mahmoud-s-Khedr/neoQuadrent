@@ -3,6 +3,7 @@ import { execFileSync } from 'node:child_process'
 import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import sharp, { type Sharp } from 'sharp'
 import { MODELS, TRANSFORMERS_VERSION, embedImages } from '../shared/embed.ts'
 import { DATASETS_DIR, EXAMPLES_DIR, QUICK } from '../shared/paths.ts'
@@ -22,6 +23,13 @@ export const CLASSES: Record<string, string> = {
   n03445777: 'golf ball',
   n03888257: 'parachute',
 }
+
+/**
+ * Version of this file's data preparation (class list, sampling, augmentations): derived files
+ * (manifest, augmented JPEGs, vector cache) are keyed by it, so changing an augmentation
+ * regenerates them instead of silently reusing the old ones.
+ */
+const PREP_VERSION = crypto.createHash('sha1').update(fs.readFileSync(fileURLToPath(import.meta.url))).digest('hex').slice(0, 8)
 
 export interface Image {
   id: number
@@ -60,7 +68,7 @@ const AUGMENTATIONS: [string, (img: Sharp, w: number, h: number) => Sharp][] = [
 export async function loadImages(): Promise<Image[]> {
   const nOriginals = QUICK ? 500 : 3000
   const nDups = QUICK ? 60 : 300
-  const manifest = path.join(DIR, `manifest-${nOriginals}.json`)
+  const manifest = path.join(DIR, `manifest-${nOriginals}-${PREP_VERSION}.json`)
   if (fs.existsSync(manifest)) return JSON.parse(fs.readFileSync(manifest, 'utf8'))
   await ensureDataset()
 
@@ -74,7 +82,7 @@ export async function loadImages(): Promise<Image[]> {
   }
   images.length = Math.min(images.length, nOriginals)
 
-  const augDir = path.join(DIR, `augmented-${nOriginals}`)
+  const augDir = path.join(DIR, `augmented-${nOriginals}-${PREP_VERSION}`)
   fs.mkdirSync(augDir, { recursive: true })
   const originals = images.length
   for (let k = 0; k < nDups; k++) {
