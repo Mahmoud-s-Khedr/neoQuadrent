@@ -180,6 +180,12 @@ export async function chunkFile(file: string, source: string): Promise<CodeChunk
     tree = null
   }
   if (!tree) return fallback()
+  // tree-sitter recovers from syntax it cannot parse (e.g. newer than the pinned grammar) with ERROR
+  // nodes instead of failing. The walker would silently skip that code, so window the whole file.
+  if (tree.rootNode.hasError) {
+    tree.delete()
+    return fallback()
+  }
 
   const out: CodeChunk[] = []
   const emit = (node: Node, startRow: number, kind: string, name: string) => {
