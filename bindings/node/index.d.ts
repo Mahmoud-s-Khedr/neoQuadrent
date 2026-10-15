@@ -109,6 +109,8 @@ export type QueryInput =
   | SparseVector
   | { nearest: DenseVector | MultiDenseVector | SparseVector }
   | { fusion: 'rrf' | 'dbsf' }
+  /** Weighted RRF. Qdrant weights compress positions: each hit adds 1 / ((pos + 1) / w + k - 1). */
+  | { rrf: { k?: number; weights?: number[] } }
   | { order_by: string | { key: string; direction?: 'asc' | 'desc' } }
 
 export interface Prefetch {

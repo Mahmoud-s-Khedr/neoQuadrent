@@ -242,7 +242,7 @@ impl Collection {
             }
         }
         let hits = shard.query(req.into_edge()?)?;
-        Ok(hits
+        let mut hits: Vec<ScoredPoint> = hits
             .into_iter()
             .map(|p| ScoredPoint {
                 id: p.id,
@@ -251,7 +251,9 @@ impl Collection {
                 vector: vector_out(p.vector),
                 order_value: p.order_value.and_then(|v| serde_json::to_value(v).ok()),
             })
-            .collect())
+            .collect();
+        order_ties_by_id(&mut hits);
+        Ok(hits)
     }
 
     /// Shorthand for a nearest-neighbour query on the default vector.
@@ -362,6 +364,25 @@ impl Collection {
     /// Make all writes so far durable on disk.
     pub fn flush(&self) -> Result<()> {
         self.inner.flush_now()
+    }
+}
+
+/// The engine returns exactly tied results (common with RRF fusion, whose implementation "does not
+/// break ties", and with duplicate vectors) in arbitrary order, so the same query can come back in a different order on every call.
+/// Order each run of equal (score, order_value) by point id so results are deterministic.
+/// Only tied neighbours move; the ranking itself is unchanged.
+fn order_ties_by_id(hits: &mut [ScoredPoint]) {
+    let mut start = 0;
+    while start < hits.len() {
+        let mut end = start + 1;
+        while end < hits.len()
+            && hits[end].score == hits[start].score
+            && hits[end].order_value == hits[start].order_value
+        {
+            end += 1;
+        }
+        hits[start..end].sort_by(|a, b| a.id.cmp(&b.id));
+        start = end;
     }
 }
 

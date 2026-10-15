@@ -1112,6 +1112,290 @@
       ]
     },
     {
+      "name": "tied scores come back in id order (deterministic)",
+      "config": {
+        "vectors": {
+          "size": 2,
+          "distance": "Dot"
+        }
+      },
+      "steps": [
+        {
+          "op": "upsert",
+          "args": [
+            {
+              "id": 5,
+              "vector": [
+                1,
+                0
+              ]
+            },
+            {
+              "id": 2,
+              "vector": [
+                1,
+                0
+              ]
+            },
+            {
+              "id": 9,
+              "vector": [
+                1,
+                0
+              ]
+            },
+            {
+              "id": 1,
+              "vector": [
+                0.5,
+                0
+              ]
+            },
+            {
+              "id": 7,
+              "vector": [
+                2,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "query": [
+              1,
+              0
+            ],
+            "limit": 5
+          },
+          "expect_ids": [
+            7,
+            2,
+            5,
+            9,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rrf: ties in id order, weights, validation",
+      "config": {
+        "vectors": {
+          "a": {
+            "size": 2,
+            "distance": "Dot"
+          },
+          "b": {
+            "size": 2,
+            "distance": "Dot"
+          }
+        }
+      },
+      "steps": [
+        {
+          "op": "upsert",
+          "args": [
+            {
+              "id": 7,
+              "vector": {
+                "a": [
+                  1,
+                  0
+                ],
+                "b": [
+                  0,
+                  1
+                ]
+              }
+            },
+            {
+              "id": 1,
+              "vector": {
+                "a": [
+                  0,
+                  1
+                ],
+                "b": [
+                  1,
+                  0
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "prefetch": [
+              {
+                "query": [
+                  1,
+                  0
+                ],
+                "using": "a",
+                "limit": 2
+              },
+              {
+                "query": [
+                  1,
+                  0
+                ],
+                "using": "b",
+                "limit": 2
+              }
+            ],
+            "query": {
+              "fusion": "rrf"
+            },
+            "limit": 2
+          },
+          "expect_ids": [
+            1,
+            7
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "prefetch": [
+              {
+                "query": [
+                  1,
+                  0
+                ],
+                "using": "b",
+                "limit": 2
+              },
+              {
+                "query": [
+                  1,
+                  0
+                ],
+                "using": "a",
+                "limit": 2
+              }
+            ],
+            "query": {
+              "fusion": "rrf"
+            },
+            "limit": 2
+          },
+          "expect_ids": [
+            1,
+            7
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "prefetch": [
+              {
+                "query": [
+                  1,
+                  0
+                ],
+                "using": "a",
+                "limit": 2
+              },
+              {
+                "query": [
+                  1,
+                  0
+                ],
+                "using": "b",
+                "limit": 2
+              }
+            ],
+            "query": {
+              "rrf": {
+                "weights": [
+                  3,
+                  1
+                ]
+              }
+            },
+            "limit": 2
+          },
+          "expect_ids": [
+            1,
+            7
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "prefetch": [
+              {
+                "query": [
+                  1,
+                  0
+                ],
+                "using": "a",
+                "limit": 2
+              },
+              {
+                "query": [
+                  1,
+                  0
+                ],
+                "using": "b",
+                "limit": 2
+              }
+            ],
+            "query": {
+              "rrf": {
+                "k": 10,
+                "weights": [
+                  1,
+                  3
+                ]
+              }
+            },
+            "limit": 2
+          },
+          "expect_ids": [
+            7,
+            1
+          ]
+        },
+        {
+          "op": "query",
+          "args": {
+            "prefetch": [
+              {
+                "query": [
+                  1,
+                  0
+                ],
+                "using": "a",
+                "limit": 2
+              },
+              {
+                "query": [
+                  1,
+                  0
+                ],
+                "using": "b",
+                "limit": 2
+              }
+            ],
+            "query": {
+              "rrf": {
+                "weights": [
+                  1
+                ]
+              }
+            },
+            "limit": 2
+          },
+          "expect_error": "invalid_argument"
+        }
+      ],
+      "_comment": "Qdrant weighted RRF: score += 1 / ((pos + 1) / w + k - 1). A weight compresses positions: weight 3 on prefetch `a` makes its 2nd hit (id 1) count almost like a 1st hit, so id 1 wins; with k=10 and weight 3 on `b`, id 7 wins."
+    },
+    {
       "name": "errors",
       "config": {
         "vectors": {

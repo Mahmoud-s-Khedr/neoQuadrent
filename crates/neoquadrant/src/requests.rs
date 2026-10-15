@@ -184,10 +184,24 @@ pub enum QueryInput {
     Nearest { nearest: VectorInput },
     /// `{"fusion": "rrf" | "dbsf"}` — combine the results of `prefetch` stages.
     Fusion { fusion: FusionKind },
+    /// `{"rrf": {"k": 60, "weights": [1.0, 2.0]}}` — reciprocal rank fusion with a custom `k`
+    /// and one weight per prefetch. Qdrant's weights compress positions rather than scale
+    /// scores: each hit adds `1 / ((pos + 1) / w + k - 1)`, so weight 3 means "every 3 results
+    /// of this prefetch count like 1 of a weight-1 prefetch".
+    Rrf { rrf: RrfParams },
     /// `{"order_by": "price"}` or `{"order_by": {"key": "price", "direction": "desc"}}`
     OrderBy { order_by: OrderByInterface },
     /// A bare vector: dense `[..]`, multi-dense `[[..], ..]` or sparse `{"indices", "values"}`.
     Vector(VectorInput),
+}
+
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct RrfParams {
+    #[serde(default)]
+    pub k: Option<usize>,
+    #[serde(default)]
+    pub weights: Option<Vec<f32>>,
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
@@ -215,9 +229,50 @@ impl QueryInput {
             QueryInput::Fusion {
                 fusion: FusionKind::Dbsf,
             } => ScoringQuery::Fusion(Fusion::Dbsf),
+            QueryInput::Rrf { rrf } => {
+                if rrf.k == Some(0) {
+                    return Err(Error::InvalidArgument("rrf.k must be at least 1".into()));
+                }
+                ScoringQuery::Fusion(Fusion::Rrf {
+                    k: rrf
+                        .k
+                        .unwrap_or(segment::common::reciprocal_rank_fusion::DEFAULT_RRF_K),
+                    weights: rrf.weights.map(|w| {
+                        w.into_iter()
+                            .map(edge::external::ordered_float::OrderedFloat)
+                            .collect()
+                    }),
+                })
+            }
             QueryInput::OrderBy { order_by } => ScoringQuery::OrderBy(order_by.into()),
         })
     }
+}
+
+/// Weighted RRF needs exactly one weight per prefetch stage.
+fn check_rrf_weights(
+    query: &Option<QueryInput>,
+    prefetch: &Option<OneOrMany<PrefetchRequest>>,
+) -> Result<()> {
+    if let Some(QueryInput::Rrf {
+        rrf: RrfParams {
+            weights: Some(w), ..
+        },
+    }) = query
+    {
+        let n = match prefetch {
+            Some(OneOrMany::One(_)) => 1,
+            Some(OneOrMany::Many(v)) => v.len(),
+            None => 0,
+        };
+        if w.len() != n {
+            return Err(Error::InvalidArgument(format!(
+                "rrf.weights has {} values but there are {n} prefetch stages",
+                w.len()
+            )));
+        }
+    }
+    Ok(())
 }
 
 /// Accept a single object or a list.
@@ -341,6 +396,7 @@ impl QueryRequest {
     }
 
     pub(crate) fn into_edge(self) -> Result<edge::QueryRequest> {
+        check_rrf_weights(&self.query, &self.prefetch)?;
         Ok(edge::QueryRequest {
             prefetches: self
                 .prefetch
@@ -383,6 +439,7 @@ pub struct PrefetchRequest {
 
 impl PrefetchRequest {
     fn into_edge(self) -> Result<edge::Prefetch> {
+        check_rrf_weights(&self.query, &self.prefetch)?;
         Ok(edge::Prefetch {
             prefetches: self
                 .prefetch
