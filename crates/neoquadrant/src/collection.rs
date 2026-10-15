@@ -381,7 +381,7 @@ fn order_ties_by_id(hits: &mut [ScoredPoint]) {
         {
             end += 1;
         }
-        hits[start..end].sort_by(|a, b| a.id.cmp(&b.id));
+        hits[start..end].sort_by_key(|p| p.id);
         start = end;
     }
 }

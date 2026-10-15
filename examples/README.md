@@ -19,7 +19,7 @@ not hold are printed as such. Bugs and surprises are logged in [FINDINGS.md](FIN
 cd bindings/node && npm run build && cd ../../examples   # native module first
 npm ci
 npm run typecheck
-npm run p1            # … p5; each takes --quick for a smaller dataset
+npm run p1            # … p5; --quick uses a smaller dataset (P2–P5)
 npm run e2e           # all five with --quick; exits non-zero on any failure
 npm run e2e -- --only p2,p4
 ```
@@ -48,7 +48,7 @@ Full-size runs (no `--quick`) on a laptop CPU.
 | BM25 (sparse, IDF by neoquadrant) | 0.54 |
 
 On "how to reduce server response time", every small model ranks word-sharing off-topic notes
-above the answers that share no words (FINDINGS #2).
+above the answers that share no words (finding 2 in FINDINGS.md).
 
 ### 2. Image similarity: Imagenette, 3,000 originals + 300 near-duplicates
 
@@ -113,7 +113,7 @@ was identical (ids, files, lines) to a full re-index of the new commit.
 | hybrid, BM25 weighted ×3 (chosen after seeing results) | 0.78 |
 
 Two planned hypotheses did not hold: semantic did not beat BM25 on conceptual queries, and plain
-RRF landed between the two retrievers (FINDINGS #7).
+RRF landed between the two retrievers (finding 7 in FINDINGS.md).
 
 ## How P2 and P4 were verified
 
