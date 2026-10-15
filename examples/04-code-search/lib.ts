@@ -8,7 +8,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { Collection, Database, Filter, PointId, ScoredPoint } from 'neoquadrant'
 import { chunks as batches } from '../shared/db.ts'
-import { MODELS, embedCode, embedPassages, embedQuery } from '../shared/embed.ts'
+import { MODELS, TRANSFORMERS_VERSION, embedCode, embedPassages, embedQuery } from '../shared/embed.ts'
 import { uuidV5 } from '../shared/ids.ts'
 import { DATASETS_DIR, EXAMPLES_DIR, QUICK } from '../shared/paths.ts'
 import { type CodeChunk, chunkFile, languageOf } from './chunk.ts'
@@ -126,15 +126,16 @@ export interface Embedder {
 export const defaultEmbedder: Embedder = { nl: (t) => embedPassages(t, 16), code: (t) => embedCode(t, 4) }
 
 /**
- * Fingerprint of everything that shapes the stored chunks and vectors: the models, and the source
- * of the chunker and of this file (which defines the embedded text). Any change forces a full
- * rebuild instead of mixing old vectors with a new query embedder or chunker.
+ * Fingerprint of everything that shapes the stored chunks and vectors: the models, the source of
+ * the chunker, of this file (the embedded text) and of shared/embed.ts (dtype, pooling, query
+ * prefix), and the transformers.js version. Any change forces a full rebuild instead of mixing
+ * old vectors with a new query embedder or chunker.
  */
 let pipeline: string | undefined
 export function pipelineVersion(): string {
   if (pipeline) return pipeline
-  const h = crypto.createHash('sha1').update(JSON.stringify([MODELS.text, MODELS.code, MAX_EMBED_CHARS]))
-  for (const f of ['chunk.ts', 'lib.ts']) h.update(fs.readFileSync(path.join(HERE, f)))
+  const h = crypto.createHash('sha1').update(JSON.stringify([MODELS.text, MODELS.code, MAX_EMBED_CHARS, TRANSFORMERS_VERSION]))
+  for (const f of ['chunk.ts', 'lib.ts', '../shared/embed.ts']) h.update(fs.readFileSync(path.join(HERE, f)))
   return (pipeline = h.digest('hex').slice(0, 16))
 }
 
