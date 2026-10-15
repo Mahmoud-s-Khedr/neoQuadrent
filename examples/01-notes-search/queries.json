@@ -1,0 +1,18 @@
+[
+  {
+    "query": "how to reduce server response time",
+    "relevant": ["caching-layer", "profiling-hot-paths", "database-indexes", "n-plus-one-queries", "http-compression", "cdn-edge", "async-io"],
+    "note": "target experiment: the core notes share no words with the query, while 4 trap notes do"
+  },
+  { "query": "keep user passwords safe in storage", "relevant": ["password-hashing"] },
+  { "query": "my web page loads slowly in the browser", "relevant": ["bundle-splitting", "image-optimization", "lazy-loading", "cdn-edge"] },
+  { "query": "roll back a bad deploy quickly", "relevant": ["blue-green-deployments", "feature-flags"] },
+  { "query": "stop attackers guessing login credentials", "relevant": ["rate-limiting-auth", "multi-factor-auth", "password-hashing"] },
+  { "query": "find out why the app crashed in production", "relevant": ["structured-logging", "distributed-tracing", "error-tracking"] },
+  { "query": "handle many more users at once", "relevant": ["horizontal-scaling", "connection-pooling", "load-balancing", "websocket-scaling"] },
+  { "query": "make sure a payment is not charged twice", "relevant": ["idempotency-keys"] },
+  { "query": "store records whose fields change often", "relevant": ["document-databases", "sql-vs-nosql", "schema-migrations"] },
+  { "query": "run a task automatically every night", "relevant": ["background-jobs"] },
+  { "query": "check code automatically before merging", "relevant": ["ci-pipelines", "unit-testing"] },
+  { "query": "protect api keys and tokens", "relevant": ["secrets-management"] }
+]

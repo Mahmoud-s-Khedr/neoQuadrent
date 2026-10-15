@@ -139,7 +139,8 @@ export interface ScoredPoint {
   order_value?: number | string
 }
 
-export interface Record {
+/** A stored point, as returned by `retrieve` and `scroll`. */
+export interface PointRecord {
   id: PointId
   payload?: Payload
   vector?: VectorInput
@@ -155,7 +156,7 @@ export interface ScrollRequest {
 }
 
 export interface ScrollResponse {
-  points: Record[]
+  points: PointRecord[]
   next_page_offset: PointId | null
 }
 
@@ -211,7 +212,7 @@ export class Collection {
   /** Nearest-neighbour shorthand for `query({query: vector, ...options})`. */
   search(vector: QueryInput, options?: SearchOptions): ScoredPoint[]
   searchAsync(vector: QueryInput, options?: SearchOptions): Promise<ScoredPoint[]>
-  retrieve(ids: PointId[], options?: { with_payload?: WithPayload; with_vector?: WithVector }): Record[]
+  retrieve(ids: PointId[], options?: { with_payload?: WithPayload; with_vector?: WithVector }): PointRecord[]
   scroll(request?: ScrollRequest): ScrollResponse
   count(request?: { filter?: Filter; exact?: boolean }): number
   /** Value counts of an indexed keyword/integer/bool/uuid field. */

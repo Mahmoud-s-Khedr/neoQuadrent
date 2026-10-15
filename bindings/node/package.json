@@ -5,12 +5,27 @@
   "license": "Apache-2.0",
   "main": "index.js",
   "types": "index.d.ts",
-  "files": ["index.js", "index.d.ts", "*.node"],
-  "engines": { "node": ">=18" },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "*.node"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "node build.js",
     "build:debug": "node build.js --debug",
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "typecheck": "tsc --ignoreConfig --noEmit --strict --types node index.d.ts"
   },
-  "keywords": ["qdrant", "vector", "database", "embedded", "hnsw", "search", "embeddings"]
+  "keywords": [
+    "qdrant",
+    "vector",
+    "database",
+    "embedded",
+    "hnsw",
+    "search",
+    "embeddings"
+  ]
 }
