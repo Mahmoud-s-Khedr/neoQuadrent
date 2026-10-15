@@ -20,7 +20,7 @@ export const CLASSES: Record<string, string> = {
   n03417042: 'garbage truck',
   n03425413: 'gas pump',
   n03445777: 'golf ball',
-  n03888605: 'parachute',
+  n03888257: 'parachute',
 }
 
 export interface Image {
