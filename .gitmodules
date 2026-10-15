@@ -1,0 +1,5 @@
+[submodule "vendor/qdrant"]
+	path = vendor/qdrant
+	url = https://github.com/qdrant/qdrant.git
+	shallow = true
+	ignore = dirty

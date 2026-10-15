@@ -1,0 +1,153 @@
+diff --git a/lib/edge/src/edge_shard/mod.rs b/lib/edge/src/edge_shard/mod.rs
+index 8bd7ed4..bd771a3 100644
+--- a/lib/edge/src/edge_shard/mod.rs
++++ b/lib/edge/src/edge_shard/mod.rs
+@@ -171,14 +171,21 @@ impl EdgeShard {
+ 
+         let segment_manifest = init_segment_manifest(path, &segments)?;
+ 
+-        Ok(Self {
++        let shard = Self {
+             path: path.into(),
+             config,
+             wal: parking_lot::Mutex::new(wal),
+             segments: LockedSegmentHolder::new(segments),
+             segment_manifest,
+             search_pool,
+-        })
++        };
++
++        let replayed = shard.replay_wal()?;
++        if replayed > 0 {
++            log::debug!("replayed {replayed} WAL operations for {}", path.display());
++        }
++
++        Ok(shard)
+     }
+ 
+     /// Rebuild and persist the segment manifest from the current live segment set, when enabled.
+@@ -271,7 +278,24 @@ impl EdgeShard {
+             .flush()
+             .map_err(|e| OperationError::service_error(format!("WAL flush failed: {e}")))?;
+ 
+-        self.segments.read().flush_all(FlushMode::Sync, true)?;
++        // Updates are applied under the updates lock; holding it makes `flush_all` claim a
++        // consistent state, so its confirmed version can safely truncate the WAL.
++        let confirmed_version = {
++            let _update_guard = self.segments.acquire_updates_lock();
++            let segments = self.segments.read();
++            let flushed = segments.flush_all(FlushMode::Sync, true)?;
++            match segments.failed_operation.first() {
++                Some(&failed) => flushed.min(failed),
++                None => flushed,
++            }
++        };
++
++        // Everything up to `confirmed_version` is durable in segments: drop it from the WAL so
++        // it does not grow without bound and reload does not replay it.
++        self.wal
++            .lock()
++            .ack(confirmed_version)
++            .map_err(|e| OperationError::service_error(format!("WAL ack failed: {e}")))?;
+ 
+         Ok(())
+     }
+diff --git a/lib/edge/src/edge_shard/update.rs b/lib/edge/src/edge_shard/update.rs
+index ec77ad8..eadff49 100644
+--- a/lib/edge/src/edge_shard/update.rs
++++ b/lib/edge/src/edge_shard/update.rs
+@@ -30,15 +30,47 @@ impl EdgeShard {
+         let mut wal = self.wal.lock();
+ 
+         let operation_id = wal.write(&record).map_err(service_error)?;
+-        let hw_counter = HardwareCounterCell::disposable();
+         let _update_guard = self.segments.acquire_updates_lock();
+ 
+         let segments_guard = self.segments.read();
+ 
++        self.apply_operation(&segments_guard, operation_id, operation)
++    }
++
++    /// Re-apply operations recorded in the WAL that may not have been persisted in segments yet
++    /// (e.g. after a crash between flushes), the same way the server's `LocalShard` does on load.
++    ///
++    /// Operations already persisted are skipped by segment point versions, so replaying the whole
++    /// unacknowledged WAL is idempotent. An operation that failed when first applied (e.g. a
++    /// wrong vector dimension) fails again here and is skipped.
++    pub(crate) fn replay_wal(&self) -> OperationResult<usize> {
++        let wal = self.wal.lock();
++        let _update_guard = self.segments.acquire_updates_lock();
++        let segments_guard = self.segments.read();
++
++        let mut replayed = 0;
++        for entry in wal.read_all(false) {
++            let (op_num, operation) = entry.map_err(service_error)?;
++            if let Err(err) = self.apply_operation(&segments_guard, op_num, operation) {
++                log::warn!("skipping WAL operation {op_num} during replay: {err}");
++            }
++            replayed += 1;
++        }
++        Ok(replayed)
++    }
++
++    fn apply_operation(
++        &self,
++        segments_guard: &shard::segment_holder::SegmentHolder,
++        operation_id: u64,
++        operation: CollectionUpdateOperations,
++    ) -> OperationResult<()> {
++        let hw_counter = HardwareCounterCell::disposable();
++
+         let result = match operation {
+             CollectionUpdateOperations::PointOperation(point_operation) => {
+                 process_point_operation(
+-                    &segments_guard,
++                    segments_guard,
+                     operation_id,
+                     point_operation,
+                     None, // edge shards have a single appendable segment, no size cap to apply
+@@ -47,7 +79,7 @@ impl EdgeShard {
+             }
+             CollectionUpdateOperations::VectorOperation(vector_operation) => {
+                 process_vector_operation(
+-                    &segments_guard,
++                    segments_guard,
+                     operation_id,
+                     vector_operation,
+                     None,
+@@ -56,7 +88,7 @@ impl EdgeShard {
+             }
+             CollectionUpdateOperations::PayloadOperation(payload_operation) => {
+                 process_payload_operation(
+-                    &segments_guard,
++                    segments_guard,
+                     operation_id,
+                     payload_operation,
+                     None,
+@@ -65,7 +97,7 @@ impl EdgeShard {
+             }
+             CollectionUpdateOperations::FieldIndexOperation(index_operation) => {
+                 process_field_index_operation(
+-                    &segments_guard,
++                    segments_guard,
+                     operation_id,
+                     &index_operation,
+                     &hw_counter,
+@@ -73,7 +105,7 @@ impl EdgeShard {
+             }
+             CollectionUpdateOperations::VectorNameOperation(ref vector_name_operation) => {
+                 let result = process_vector_name_operation(
+-                    &segments_guard,
++                    segments_guard,
+                     operation_id,
+                     vector_name_operation,
+                 );
+@@ -90,7 +122,7 @@ impl EdgeShard {
+             #[cfg(feature = "staging")]
+             CollectionUpdateOperations::StagingOperation(staging_operation) => {
+                 shard::update::process_staging_operation(
+-                    &segments_guard,
++                    segments_guard,
+                     operation_id,
+                     staging_operation,
+                 )

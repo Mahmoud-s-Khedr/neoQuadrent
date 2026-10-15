@@ -1,0 +1,9 @@
+neoquadrant
+Copyright 2026 neoquadrant contributors
+
+This product embeds Qdrant (https://github.com/qdrant/qdrant), vendored as a git
+submodule under vendor/qdrant and pinned to release v1.19.2.
+Copyright Qdrant Solutions GmbH, licensed under the Apache License, Version 2.0.
+
+Modifications to Qdrant are kept as patch files in patches/ and applied with
+scripts/apply-patches.sh.
