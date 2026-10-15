@@ -17,7 +17,8 @@
     "p4": "tsx 04-code-search/experiment.ts",
     "p4:search": "tsx 04-code-search/search.ts",
     "p5": "tsx 05-hybrid-docs/experiment.ts",
-    "p5:prepare": "tsx 05-hybrid-docs/prepare.ts"
+    "p5:prepare": "tsx 05-hybrid-docs/prepare.ts",
+    "e2e": "tsx shared/e2e.ts"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.3.1",
