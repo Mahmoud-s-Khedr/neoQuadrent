@@ -10,10 +10,12 @@
     "typecheck": "tsc --noEmit && tsc --ignoreConfig --noEmit --strict --types node ../bindings/node/index.d.ts",
     "spike": "tsx shared/spike.ts",
     "p1": "tsx 01-notes-search/experiment.ts",
-    "p1:search": "tsx 01-notes-search/search.ts"
+    "p1:search": "tsx 01-notes-search/search.ts",
+    "p3": "tsx 03-duplicate-questions/experiment.ts"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.3.1",
+    "hyparquet": "^1.31.4",
     "neoquadrant": "file:../bindings/node"
   },
   "devDependencies": {

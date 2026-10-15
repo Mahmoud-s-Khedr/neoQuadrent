@@ -1,0 +1,992 @@
+[
+ {
+  "id": "g00-orig",
+  "group": "g00",
+  "kind": "original",
+  "concept": "fractions",
+  "text": "What is 3/4 of 20?",
+  "answer": "15"
+ },
+ {
+  "id": "g00-dup",
+  "group": "g00",
+  "kind": "exact_duplicate",
+  "concept": "fractions",
+  "text": "  WHAT  IS  3/4  OF  20 ?",
+  "answer": "15"
+ },
+ {
+  "id": "g00-para",
+  "group": "g00",
+  "kind": "paraphrase",
+  "concept": "fractions",
+  "text": "Find three quarters of 20.",
+  "answer": "15"
+ },
+ {
+  "id": "g00-look",
+  "group": "g00",
+  "kind": "lookalike",
+  "lookalike_kind": "numbers",
+  "concept": "fractions",
+  "text": "What is 3/4 of 24?",
+  "answer": "18"
+ },
+ {
+  "id": "g01-orig",
+  "group": "g01",
+  "kind": "original",
+  "concept": "fractions",
+  "text": "Simplify the fraction 12/16.",
+  "answer": "3/4"
+ },
+ {
+  "id": "g01-dup",
+  "group": "g01",
+  "kind": "exact_duplicate",
+  "concept": "fractions",
+  "text": "  SIMPLIFY  THE  FRACTION  12/16 ?",
+  "answer": "3/4"
+ },
+ {
+  "id": "g01-para",
+  "group": "g01",
+  "kind": "paraphrase",
+  "concept": "fractions",
+  "text": "Reduce 12/16 to lowest terms.",
+  "answer": "3/4"
+ },
+ {
+  "id": "g01-look",
+  "group": "g01",
+  "kind": "lookalike",
+  "lookalike_kind": "numbers",
+  "concept": "fractions",
+  "text": "Simplify the fraction 12/18.",
+  "answer": "2/3"
+ },
+ {
+  "id": "g02-orig",
+  "group": "g02",
+  "kind": "original",
+  "concept": "fractions",
+  "text": "Which is larger, 2/3 or 3/5?",
+  "answer": "2/3"
+ },
+ {
+  "id": "g02-dup",
+  "group": "g02",
+  "kind": "exact_duplicate",
+  "concept": "fractions",
+  "text": "  WHICH  IS  LARGER,  2/3  OR  3/5 ?",
+  "answer": "2/3"
+ },
+ {
+  "id": "g02-para",
+  "group": "g02",
+  "kind": "paraphrase",
+  "concept": "fractions",
+  "text": "Of 2/3 and 3/5, which fraction is bigger?",
+  "answer": "2/3"
+ },
+ {
+  "id": "g02-look",
+  "group": "g02",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "fractions",
+  "text": "Which is smaller, 2/3 or 3/5?",
+  "answer": "3/5"
+ },
+ {
+  "id": "g03-orig",
+  "group": "g03",
+  "kind": "original",
+  "concept": "percentages",
+  "text": "What is 25% of 80?",
+  "answer": "20"
+ },
+ {
+  "id": "g03-dup",
+  "group": "g03",
+  "kind": "exact_duplicate",
+  "concept": "percentages",
+  "text": "  WHAT  IS  25%  OF  80 ?",
+  "answer": "20"
+ },
+ {
+  "id": "g03-para",
+  "group": "g03",
+  "kind": "paraphrase",
+  "concept": "percentages",
+  "text": "Calculate twenty-five percent of 80.",
+  "answer": "20"
+ },
+ {
+  "id": "g03-look",
+  "group": "g03",
+  "kind": "lookalike",
+  "lookalike_kind": "numbers",
+  "concept": "percentages",
+  "text": "What is 25% of 60?",
+  "answer": "15"
+ },
+ {
+  "id": "g04-orig",
+  "group": "g04",
+  "kind": "original",
+  "concept": "percentages",
+  "text": "A shirt costs $40 and is discounted by 10%. What is the sale price?",
+  "answer": "$36"
+ },
+ {
+  "id": "g04-dup",
+  "group": "g04",
+  "kind": "exact_duplicate",
+  "concept": "percentages",
+  "text": "  A  SHIRT  COSTS  $40  AND  IS  DISCOUNTED  BY  10%.  WHAT  IS  THE  SALE  PRICE ?",
+  "answer": "$36"
+ },
+ {
+  "id": "g04-para",
+  "group": "g04",
+  "kind": "paraphrase",
+  "concept": "percentages",
+  "text": "After a 10% discount, how much does a $40 shirt cost?",
+  "answer": "$36"
+ },
+ {
+  "id": "g04-look",
+  "group": "g04",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "percentages",
+  "text": "A shirt costs $40 and its price increases by 10%. What is the new price?",
+  "answer": "$44"
+ },
+ {
+  "id": "g05-orig",
+  "group": "g05",
+  "kind": "original",
+  "concept": "percentages",
+  "text": "If 30 of 120 students walk to school, what percent walk?",
+  "answer": "25%"
+ },
+ {
+  "id": "g05-dup",
+  "group": "g05",
+  "kind": "exact_duplicate",
+  "concept": "percentages",
+  "text": "  IF  30  OF  120  STUDENTS  WALK  TO  SCHOOL,  WHAT  PERCENT  WALK ?",
+  "answer": "25%"
+ },
+ {
+  "id": "g05-para",
+  "group": "g05",
+  "kind": "paraphrase",
+  "concept": "percentages",
+  "text": "What percentage of 120 students walk to school if 30 do?",
+  "answer": "25%"
+ },
+ {
+  "id": "g05-look",
+  "group": "g05",
+  "kind": "lookalike",
+  "lookalike_kind": "numbers",
+  "concept": "percentages",
+  "text": "If 30 of 150 students walk to school, what percent walk?",
+  "answer": "20%"
+ },
+ {
+  "id": "g06-orig",
+  "group": "g06",
+  "kind": "original",
+  "concept": "area",
+  "text": "Find the area of a rectangle 6 cm long and 4 cm wide.",
+  "answer": "24 cm²"
+ },
+ {
+  "id": "g06-dup",
+  "group": "g06",
+  "kind": "exact_duplicate",
+  "concept": "area",
+  "text": "  FIND  THE  AREA  OF  A  RECTANGLE  6  CM  LONG  AND  4  CM  WIDE ?",
+  "answer": "24 cm²"
+ },
+ {
+  "id": "g06-para",
+  "group": "g06",
+  "kind": "paraphrase",
+  "concept": "area",
+  "text": "A rectangle measures 6 cm by 4 cm. What is its area?",
+  "answer": "24 cm²"
+ },
+ {
+  "id": "g06-look",
+  "group": "g06",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "area",
+  "text": "Find the perimeter of a rectangle 6 cm long and 4 cm wide.",
+  "answer": "20 cm"
+ },
+ {
+  "id": "g07-orig",
+  "group": "g07",
+  "kind": "original",
+  "concept": "area",
+  "text": "What is the area of a triangle with base 10 m and height 5 m?",
+  "answer": "25 m²"
+ },
+ {
+  "id": "g07-dup",
+  "group": "g07",
+  "kind": "exact_duplicate",
+  "concept": "area",
+  "text": "  WHAT  IS  THE  AREA  OF  A  TRIANGLE  WITH  BASE  10  M  AND  HEIGHT  5  M ?",
+  "answer": "25 m²"
+ },
+ {
+  "id": "g07-para",
+  "group": "g07",
+  "kind": "paraphrase",
+  "concept": "area",
+  "text": "A triangle has a base of 10 m and a height of 5 m. Calculate its area.",
+  "answer": "25 m²"
+ },
+ {
+  "id": "g07-look",
+  "group": "g07",
+  "kind": "lookalike",
+  "lookalike_kind": "numbers",
+  "concept": "area",
+  "text": "What is the area of a triangle with base 10 m and height 8 m?",
+  "answer": "40 m²"
+ },
+ {
+  "id": "g08-orig",
+  "group": "g08",
+  "kind": "original",
+  "concept": "area",
+  "text": "Find the area of a circle with radius 3 cm (use π ≈ 3.14).",
+  "answer": "28.26 cm²"
+ },
+ {
+  "id": "g08-dup",
+  "group": "g08",
+  "kind": "exact_duplicate",
+  "concept": "area",
+  "text": "  FIND  THE  AREA  OF  A  CIRCLE  WITH  RADIUS  3  CM  (USE  Π  ≈  3.14) ?",
+  "answer": "28.26 cm²"
+ },
+ {
+  "id": "g08-para",
+  "group": "g08",
+  "kind": "paraphrase",
+  "concept": "area",
+  "text": "Using π ≈ 3.14, what is the area of a circle whose radius is 3 cm?",
+  "answer": "28.26 cm²"
+ },
+ {
+  "id": "g08-look",
+  "group": "g08",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "area",
+  "text": "Find the circumference of a circle with radius 3 cm (use π ≈ 3.14).",
+  "answer": "18.84 cm"
+ },
+ {
+  "id": "g09-orig",
+  "group": "g09",
+  "kind": "original",
+  "concept": "speed",
+  "text": "A car travels 150 km in 3 hours. What is its average speed?",
+  "answer": "50 km/h"
+ },
+ {
+  "id": "g09-dup",
+  "group": "g09",
+  "kind": "exact_duplicate",
+  "concept": "speed",
+  "text": "  A  CAR  TRAVELS  150  KM  IN  3  HOURS.  WHAT  IS  ITS  AVERAGE  SPEED ?",
+  "answer": "50 km/h"
+ },
+ {
+  "id": "g09-para",
+  "group": "g09",
+  "kind": "paraphrase",
+  "concept": "speed",
+  "text": "What is the average speed of a car that covers 150 km in 3 hours?",
+  "answer": "50 km/h"
+ },
+ {
+  "id": "g09-look",
+  "group": "g09",
+  "kind": "lookalike",
+  "lookalike_kind": "numbers",
+  "concept": "speed",
+  "text": "A car travels 150 km in 2 hours. What is its average speed?",
+  "answer": "75 km/h"
+ },
+ {
+  "id": "g10-orig",
+  "group": "g10",
+  "kind": "original",
+  "concept": "speed",
+  "text": "How long does it take to cover 60 km at 20 km/h?",
+  "answer": "3 hours"
+ },
+ {
+  "id": "g10-dup",
+  "group": "g10",
+  "kind": "exact_duplicate",
+  "concept": "speed",
+  "text": "  HOW  LONG  DOES  IT  TAKE  TO  COVER  60  KM  AT  20  KM/H ?",
+  "answer": "3 hours"
+ },
+ {
+  "id": "g10-para",
+  "group": "g10",
+  "kind": "paraphrase",
+  "concept": "speed",
+  "text": "At 20 km/h, how many hours are needed to travel 60 km?",
+  "answer": "3 hours"
+ },
+ {
+  "id": "g10-look",
+  "group": "g10",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "speed",
+  "text": "How far do you travel in 60 minutes at 20 km/h?",
+  "answer": "20 km"
+ },
+ {
+  "id": "g11-orig",
+  "group": "g11",
+  "kind": "original",
+  "concept": "equations",
+  "text": "Solve for x: 2x + 6 = 14.",
+  "answer": "4"
+ },
+ {
+  "id": "g11-dup",
+  "group": "g11",
+  "kind": "exact_duplicate",
+  "concept": "equations",
+  "text": "  SOLVE  FOR  X:  2X  +  6  =  14 ?",
+  "answer": "4"
+ },
+ {
+  "id": "g11-para",
+  "group": "g11",
+  "kind": "paraphrase",
+  "concept": "equations",
+  "text": "Find x if 2x + 6 = 14.",
+  "answer": "4"
+ },
+ {
+  "id": "g11-look",
+  "group": "g11",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "equations",
+  "text": "Solve for x: 2x - 6 = 14.",
+  "answer": "10"
+ },
+ {
+  "id": "g12-orig",
+  "group": "g12",
+  "kind": "original",
+  "concept": "equations",
+  "text": "Solve for y: 5y = 45.",
+  "answer": "9"
+ },
+ {
+  "id": "g12-dup",
+  "group": "g12",
+  "kind": "exact_duplicate",
+  "concept": "equations",
+  "text": "  SOLVE  FOR  Y:  5Y  =  45 ?",
+  "answer": "9"
+ },
+ {
+  "id": "g12-para",
+  "group": "g12",
+  "kind": "paraphrase",
+  "concept": "equations",
+  "text": "What value of y satisfies 5y = 45?",
+  "answer": "9"
+ },
+ {
+  "id": "g12-look",
+  "group": "g12",
+  "kind": "lookalike",
+  "lookalike_kind": "numbers",
+  "concept": "equations",
+  "text": "Solve for y: 5y = 55.",
+  "answer": "11"
+ },
+ {
+  "id": "g13-orig",
+  "group": "g13",
+  "kind": "original",
+  "concept": "equations",
+  "text": "If 3a - 4 = 11, what is a?",
+  "answer": "5"
+ },
+ {
+  "id": "g13-dup",
+  "group": "g13",
+  "kind": "exact_duplicate",
+  "concept": "equations",
+  "text": "  IF  3A  -  4  =  11,  WHAT  IS  A ?",
+  "answer": "5"
+ },
+ {
+  "id": "g13-para",
+  "group": "g13",
+  "kind": "paraphrase",
+  "concept": "equations",
+  "text": "Find a when 3a - 4 = 11.",
+  "answer": "5"
+ },
+ {
+  "id": "g13-look",
+  "group": "g13",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "equations",
+  "text": "If 3a + 4 = 11, what is a?",
+  "answer": "7/3"
+ },
+ {
+  "id": "g14-orig",
+  "group": "g14",
+  "kind": "original",
+  "concept": "primes",
+  "text": "Is 21 a prime number?",
+  "answer": "No"
+ },
+ {
+  "id": "g14-dup",
+  "group": "g14",
+  "kind": "exact_duplicate",
+  "concept": "primes",
+  "text": "  IS  21  A  PRIME  NUMBER ?",
+  "answer": "No"
+ },
+ {
+  "id": "g14-para",
+  "group": "g14",
+  "kind": "paraphrase",
+  "concept": "primes",
+  "text": "Determine whether 21 is prime.",
+  "answer": "No"
+ },
+ {
+  "id": "g14-look",
+  "group": "g14",
+  "kind": "lookalike",
+  "lookalike_kind": "numbers",
+  "concept": "primes",
+  "text": "Is 23 a prime number?",
+  "answer": "Yes"
+ },
+ {
+  "id": "g15-orig",
+  "group": "g15",
+  "kind": "original",
+  "concept": "primes",
+  "text": "What is the largest prime factor of 30?",
+  "answer": "5"
+ },
+ {
+  "id": "g15-dup",
+  "group": "g15",
+  "kind": "exact_duplicate",
+  "concept": "primes",
+  "text": "  WHAT  IS  THE  LARGEST  PRIME  FACTOR  OF  30 ?",
+  "answer": "5"
+ },
+ {
+  "id": "g15-para",
+  "group": "g15",
+  "kind": "paraphrase",
+  "concept": "primes",
+  "text": "Of the prime factors of 30, which is the biggest?",
+  "answer": "5"
+ },
+ {
+  "id": "g15-look",
+  "group": "g15",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "primes",
+  "text": "What is the smallest prime factor of 30?",
+  "answer": "2"
+ },
+ {
+  "id": "g16-orig",
+  "group": "g16",
+  "kind": "original",
+  "concept": "statistics",
+  "text": "Find the mean of 4, 8, 6 and 2.",
+  "answer": "5"
+ },
+ {
+  "id": "g16-dup",
+  "group": "g16",
+  "kind": "exact_duplicate",
+  "concept": "statistics",
+  "text": "  FIND  THE  MEAN  OF  4,  8,  6  AND  2 ?",
+  "answer": "5"
+ },
+ {
+  "id": "g16-para",
+  "group": "g16",
+  "kind": "paraphrase",
+  "concept": "statistics",
+  "text": "What is the average of the numbers 4, 8, 6 and 2?",
+  "answer": "5"
+ },
+ {
+  "id": "g16-look",
+  "group": "g16",
+  "kind": "lookalike",
+  "lookalike_kind": "wording_same_answer",
+  "concept": "statistics",
+  "text": "Find the median of 4, 8, 6 and 2.",
+  "answer": "5"
+ },
+ {
+  "id": "g17-orig",
+  "group": "g17",
+  "kind": "original",
+  "concept": "statistics",
+  "text": "What is the mode of 3, 7, 7, 2, 9?",
+  "answer": "7"
+ },
+ {
+  "id": "g17-dup",
+  "group": "g17",
+  "kind": "exact_duplicate",
+  "concept": "statistics",
+  "text": "  WHAT  IS  THE  MODE  OF  3,  7,  7,  2,  9 ?",
+  "answer": "7"
+ },
+ {
+  "id": "g17-para",
+  "group": "g17",
+  "kind": "paraphrase",
+  "concept": "statistics",
+  "text": "Which value appears most often in 3, 7, 7, 2, 9?",
+  "answer": "7"
+ },
+ {
+  "id": "g17-look",
+  "group": "g17",
+  "kind": "lookalike",
+  "lookalike_kind": "numbers",
+  "concept": "statistics",
+  "text": "What is the mode of 3, 3, 7, 2, 9?",
+  "answer": "3"
+ },
+ {
+  "id": "g18-orig",
+  "group": "g18",
+  "kind": "original",
+  "concept": "statistics",
+  "text": "What is the range of 12, 5, 9, 20?",
+  "answer": "15"
+ },
+ {
+  "id": "g18-dup",
+  "group": "g18",
+  "kind": "exact_duplicate",
+  "concept": "statistics",
+  "text": "  WHAT  IS  THE  RANGE  OF  12,  5,  9,  20 ?",
+  "answer": "15"
+ },
+ {
+  "id": "g18-para",
+  "group": "g18",
+  "kind": "paraphrase",
+  "concept": "statistics",
+  "text": "Find the difference between the largest and smallest of 12, 5, 9, 20.",
+  "answer": "15"
+ },
+ {
+  "id": "g18-look",
+  "group": "g18",
+  "kind": "lookalike",
+  "lookalike_kind": "numbers",
+  "concept": "statistics",
+  "text": "What is the range of 12, 5, 9, 30?",
+  "answer": "25"
+ },
+ {
+  "id": "g19-orig",
+  "group": "g19",
+  "kind": "original",
+  "concept": "photosynthesis",
+  "text": "Which gas do plants absorb during photosynthesis?",
+  "answer": "Carbon dioxide"
+ },
+ {
+  "id": "g19-dup",
+  "group": "g19",
+  "kind": "exact_duplicate",
+  "concept": "photosynthesis",
+  "text": "  WHICH  GAS  DO  PLANTS  ABSORB  DURING  PHOTOSYNTHESIS ?",
+  "answer": "Carbon dioxide"
+ },
+ {
+  "id": "g19-para",
+  "group": "g19",
+  "kind": "paraphrase",
+  "concept": "photosynthesis",
+  "text": "During photosynthesis, what gas is taken in by plants?",
+  "answer": "Carbon dioxide"
+ },
+ {
+  "id": "g19-look",
+  "group": "g19",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "photosynthesis",
+  "text": "Which gas do plants release during photosynthesis?",
+  "answer": "Oxygen"
+ },
+ {
+  "id": "g20-orig",
+  "group": "g20",
+  "kind": "original",
+  "concept": "photosynthesis",
+  "text": "Where in the plant cell does photosynthesis take place?",
+  "answer": "Chloroplast"
+ },
+ {
+  "id": "g20-dup",
+  "group": "g20",
+  "kind": "exact_duplicate",
+  "concept": "photosynthesis",
+  "text": "  WHERE  IN  THE  PLANT  CELL  DOES  PHOTOSYNTHESIS  TAKE  PLACE ?",
+  "answer": "Chloroplast"
+ },
+ {
+  "id": "g20-para",
+  "group": "g20",
+  "kind": "paraphrase",
+  "concept": "photosynthesis",
+  "text": "In which organelle of a plant cell does photosynthesis happen?",
+  "answer": "Chloroplast"
+ },
+ {
+  "id": "g20-look",
+  "group": "g20",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "photosynthesis",
+  "text": "Where in the plant cell does respiration take place?",
+  "answer": "Mitochondria"
+ },
+ {
+  "id": "g21-orig",
+  "group": "g21",
+  "kind": "original",
+  "concept": "forces",
+  "text": "What is the force needed to accelerate a 2 kg mass at 3 m/s²?",
+  "answer": "6 N"
+ },
+ {
+  "id": "g21-dup",
+  "group": "g21",
+  "kind": "exact_duplicate",
+  "concept": "forces",
+  "text": "  WHAT  IS  THE  FORCE  NEEDED  TO  ACCELERATE  A  2  KG  MASS  AT  3  M/S² ?",
+  "answer": "6 N"
+ },
+ {
+  "id": "g21-para",
+  "group": "g21",
+  "kind": "paraphrase",
+  "concept": "forces",
+  "text": "How much force accelerates a 2 kg object at 3 m/s²?",
+  "answer": "6 N"
+ },
+ {
+  "id": "g21-look",
+  "group": "g21",
+  "kind": "lookalike",
+  "lookalike_kind": "numbers",
+  "concept": "forces",
+  "text": "What is the force needed to accelerate a 5 kg mass at 3 m/s²?",
+  "answer": "15 N"
+ },
+ {
+  "id": "g22-orig",
+  "group": "g22",
+  "kind": "original",
+  "concept": "forces",
+  "text": "Which of Newton's laws states that every action has an equal and opposite reaction?",
+  "answer": "Third law"
+ },
+ {
+  "id": "g22-dup",
+  "group": "g22",
+  "kind": "exact_duplicate",
+  "concept": "forces",
+  "text": "  WHICH  OF  NEWTON'S  LAWS  STATES  THAT  EVERY  ACTION  HAS  AN  EQUAL  AND  OPPOSITE  REACTION ?",
+  "answer": "Third law"
+ },
+ {
+  "id": "g22-para",
+  "group": "g22",
+  "kind": "paraphrase",
+  "concept": "forces",
+  "text": "Name the Newton's law about equal and opposite reactions.",
+  "answer": "Third law"
+ },
+ {
+  "id": "g22-look",
+  "group": "g22",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "forces",
+  "text": "Which of Newton's laws states that an object stays at rest unless acted on by a force?",
+  "answer": "First law"
+ },
+ {
+  "id": "g23-orig",
+  "group": "g23",
+  "kind": "original",
+  "concept": "states_of_matter",
+  "text": "At what temperature does water boil at sea level in Celsius?",
+  "answer": "100 °C"
+ },
+ {
+  "id": "g23-dup",
+  "group": "g23",
+  "kind": "exact_duplicate",
+  "concept": "states_of_matter",
+  "text": "  AT  WHAT  TEMPERATURE  DOES  WATER  BOIL  AT  SEA  LEVEL  IN  CELSIUS ?",
+  "answer": "100 °C"
+ },
+ {
+  "id": "g23-para",
+  "group": "g23",
+  "kind": "paraphrase",
+  "concept": "states_of_matter",
+  "text": "What is the boiling point of water at sea level, in degrees Celsius?",
+  "answer": "100 °C"
+ },
+ {
+  "id": "g23-look",
+  "group": "g23",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "states_of_matter",
+  "text": "At what temperature does water freeze at sea level in Celsius?",
+  "answer": "0 °C"
+ },
+ {
+  "id": "g24-orig",
+  "group": "g24",
+  "kind": "original",
+  "concept": "states_of_matter",
+  "text": "What is it called when a solid turns directly into a gas?",
+  "answer": "Sublimation"
+ },
+ {
+  "id": "g24-dup",
+  "group": "g24",
+  "kind": "exact_duplicate",
+  "concept": "states_of_matter",
+  "text": "  WHAT  IS  IT  CALLED  WHEN  A  SOLID  TURNS  DIRECTLY  INTO  A  GAS ?",
+  "answer": "Sublimation"
+ },
+ {
+  "id": "g24-para",
+  "group": "g24",
+  "kind": "paraphrase",
+  "concept": "states_of_matter",
+  "text": "Name the process in which a solid changes straight into a gas.",
+  "answer": "Sublimation"
+ },
+ {
+  "id": "g24-look",
+  "group": "g24",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "states_of_matter",
+  "text": "What is it called when a gas turns directly into a solid?",
+  "answer": "Deposition"
+ },
+ {
+  "id": "g25-orig",
+  "group": "g25",
+  "kind": "original",
+  "concept": "geography",
+  "text": "What is the capital of Australia?",
+  "answer": "Canberra"
+ },
+ {
+  "id": "g25-dup",
+  "group": "g25",
+  "kind": "exact_duplicate",
+  "concept": "geography",
+  "text": "  WHAT  IS  THE  CAPITAL  OF  AUSTRALIA ?",
+  "answer": "Canberra"
+ },
+ {
+  "id": "g25-para",
+  "group": "g25",
+  "kind": "paraphrase",
+  "concept": "geography",
+  "text": "Which city is Australia's capital?",
+  "answer": "Canberra"
+ },
+ {
+  "id": "g25-look",
+  "group": "g25",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "geography",
+  "text": "What is the largest city of Australia?",
+  "answer": "Sydney"
+ },
+ {
+  "id": "g26-orig",
+  "group": "g26",
+  "kind": "original",
+  "concept": "geography",
+  "text": "Which is the longest river in Africa?",
+  "answer": "Nile"
+ },
+ {
+  "id": "g26-dup",
+  "group": "g26",
+  "kind": "exact_duplicate",
+  "concept": "geography",
+  "text": "  WHICH  IS  THE  LONGEST  RIVER  IN  AFRICA ?",
+  "answer": "Nile"
+ },
+ {
+  "id": "g26-para",
+  "group": "g26",
+  "kind": "paraphrase",
+  "concept": "geography",
+  "text": "Name Africa's longest river.",
+  "answer": "Nile"
+ },
+ {
+  "id": "g26-look",
+  "group": "g26",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "geography",
+  "text": "Which is the longest river in South America?",
+  "answer": "Amazon"
+ },
+ {
+  "id": "g27-orig",
+  "group": "g27",
+  "kind": "original",
+  "concept": "history",
+  "text": "In which year did World War II end?",
+  "answer": "1945"
+ },
+ {
+  "id": "g27-dup",
+  "group": "g27",
+  "kind": "exact_duplicate",
+  "concept": "history",
+  "text": "  IN  WHICH  YEAR  DID  WORLD  WAR  II  END ?",
+  "answer": "1945"
+ },
+ {
+  "id": "g27-para",
+  "group": "g27",
+  "kind": "paraphrase",
+  "concept": "history",
+  "text": "When did the Second World War come to an end?",
+  "answer": "1945"
+ },
+ {
+  "id": "g27-look",
+  "group": "g27",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "history",
+  "text": "In which year did World War II begin?",
+  "answer": "1939"
+ },
+ {
+  "id": "g28-orig",
+  "group": "g28",
+  "kind": "original",
+  "concept": "grammar",
+  "text": "What is the past tense of 'run'?",
+  "answer": "ran"
+ },
+ {
+  "id": "g28-dup",
+  "group": "g28",
+  "kind": "exact_duplicate",
+  "concept": "grammar",
+  "text": "  WHAT  IS  THE  PAST  TENSE  OF  'RUN' ?",
+  "answer": "ran"
+ },
+ {
+  "id": "g28-para",
+  "group": "g28",
+  "kind": "paraphrase",
+  "concept": "grammar",
+  "text": "Give the past tense form of the verb 'run'.",
+  "answer": "ran"
+ },
+ {
+  "id": "g28-look",
+  "group": "g28",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "grammar",
+  "text": "What is the past participle of 'run'?",
+  "answer": "run"
+ },
+ {
+  "id": "g29-orig",
+  "group": "g29",
+  "kind": "original",
+  "concept": "grammar",
+  "text": "Which word in 'The quick fox jumps' is the verb?",
+  "answer": "jumps"
+ },
+ {
+  "id": "g29-dup",
+  "group": "g29",
+  "kind": "exact_duplicate",
+  "concept": "grammar",
+  "text": "  WHICH  WORD  IN  'THE  QUICK  FOX  JUMPS'  IS  THE  VERB ?",
+  "answer": "jumps"
+ },
+ {
+  "id": "g29-para",
+  "group": "g29",
+  "kind": "paraphrase",
+  "concept": "grammar",
+  "text": "Identify the verb in the sentence 'The quick fox jumps'.",
+  "answer": "jumps"
+ },
+ {
+  "id": "g29-look",
+  "group": "g29",
+  "kind": "lookalike",
+  "lookalike_kind": "wording",
+  "concept": "grammar",
+  "text": "Which word in 'The quick fox jumps' is the adjective?",
+  "answer": "quick"
+ }
+]
