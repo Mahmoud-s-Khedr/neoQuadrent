@@ -1,0 +1,21 @@
+[
+  { "query": "extract the bearer token from the Authorization header", "relevant": [{ "repo": "realworld", "path": "src/app/routes/auth/auth.ts", "name": "getTokenFromHeaders" }] },
+  { "query": "sign a JSON web token for a user id", "relevant": [{ "repo": "realworld", "path": "src/app/routes/auth/token.utils.ts", "name": "generateToken" }] },
+  { "query": "middleware that rejects requests without a valid JWT", "relevant": [{ "repo": "realworld", "path": "src/app/routes/auth/auth.ts", "name": "auth" }] },
+  { "query": "hash the password when a new user registers", "relevant": [{ "repo": "realworld", "path": "src/app/routes/auth/auth.service.ts", "name": "createUser" }] },
+  { "query": "check the email and password when logging in", "relevant": [{ "repo": "realworld", "path": "src/app/routes/auth/auth.service.ts", "name": "login" }] },
+  { "query": "follow another user's profile", "relevant": [{ "repo": "realworld", "path": "src/app/routes/profile/profile.service.ts", "name": "followUser" }] },
+  { "query": "mark an article as a favorite", "relevant": [{ "repo": "realworld", "path": "src/app/routes/article/article.service.ts", "name": "favoriteArticle" }] },
+  { "query": "order results with equal scores by point id so ties are deterministic", "relevant": [{ "repo": "neoquadrant", "path": "crates/neoquadrant/src/collection.rs", "name": "order_ties_by_id" }] },
+  { "query": "reject a query that names a vector the collection does not have", "relevant": [{ "repo": "neoquadrant", "path": "crates/neoquadrant/src/collection.rs", "name": "Collection::query" }] },
+  { "query": "flush to disk after every write when durability is full", "relevant": [{ "repo": "neoquadrant", "path": "crates/neoquadrant/src/collection.rs", "name": "Collection::apply" }] },
+  { "query": "background thread that optimizes collections once writes settle", "relevant": [{ "repo": "neoquadrant", "path": "crates/neoquadrant/src/db.rs", "name": "background_worker" }] },
+  { "query": "fail when a second process opens the same database directory", "relevant": [{ "repo": "neoquadrant", "path": "crates/neoquadrant/src/db.rs", "name": "DbInner::open" }] },
+  { "query": "validate the weights of weighted reciprocal rank fusion", "relevant": [{ "repo": "neoquadrant", "path": "crates/neoquadrant/src/requests.rs", "name": "check_rrf_weights" }] },
+  { "query": "turn native errors into JavaScript errors with a code property", "relevant": [{ "repo": "neoquadrant", "path": "bindings/node/index.js", "name": "convertError" }] },
+  { "query": "create the write-ahead log directory and open the WAL", "relevant": [{ "repo": "qdrant-edge", "path": "lib/edge/src/edge_shard/mod.rs", "name": "ensure_dirs_and_open_wal" }] },
+  { "query": "run optimizers to merge segments and build vector indexes", "relevant": [{ "repo": "qdrant-edge", "path": "lib/edge/src/edge_shard/optimize.rs", "name": "EdgeShard::optimize" }, { "repo": "qdrant-edge", "path": "lib/edge/src/edge_shard/optimize.rs", "name": "EdgeShard::optimize_with_budget" }, { "repo": "qdrant-edge", "path": "lib/edge/src/edge_shard/optimize.rs", "name": "EdgeShard::build_blocking_optimizers" }] },
+  { "query": "restore a shard from a snapshot archive", "relevant": [{ "repo": "qdrant-edge", "path": "lib/edge/src/edge_shard/snapshots.rs", "name": "EdgeShard::unpack_snapshot" }, { "repo": "qdrant-edge", "path": "lib/edge/src/edge_shard/snapshots.rs", "name": "EdgeShard::recover_partial_snapshot" }] },
+  { "query": "combine prefetch results with reciprocal rank fusion", "relevant": [{ "repo": "qdrant-edge", "path": "lib/edge/src/read_view/ops/query.rs", "name": "EdgeReadView<H>::fusion_rescore" }] },
+  { "query": "tokenize and stem text into a BM25 sparse vector", "relevant": [{ "repo": "qdrant-edge", "path": "lib/edge/src/bm25_embed.rs", "name": "EdgeBm25::embed_document" }, { "repo": "qdrant-edge", "path": "lib/edge/src/bm25_embed.rs", "name": "build_tokens_processor" }] }
+]
