@@ -16,6 +16,9 @@ import { MODELS_DIR } from './paths.ts'
 
 env.cacheDir = MODELS_DIR
 
+/** Part of P4's index fingerprint: a library upgrade can change the vectors. */
+export const TRANSFORMERS_VERSION = env.version
+
 export const MODELS = {
   text: 'Xenova/bge-small-en-v1.5', // 384-d, CLS pooling
   textLarge: 'mixedbread-ai/mxbai-embed-large-v1', // 1024-d, CLS pooling, 335M params

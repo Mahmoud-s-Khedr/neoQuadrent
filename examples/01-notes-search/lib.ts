@@ -6,6 +6,7 @@ import type { Collection, Database, Filter, PointStruct } from 'neoquadrant'
 import { bm25Document, bm25Query } from '../shared/bm25.ts'
 import { chunks } from '../shared/db.ts'
 import { embedPassages, embedPassagesLarge, embedQuery, embedQueryLarge } from '../shared/embed.ts'
+import { uuidV5 } from '../shared/ids.ts'
 
 export const COLLECTION = 'notes'
 
@@ -18,15 +19,7 @@ export interface Chunk {
   index: number
 }
 
-/** UUID v5 (SHA-1, URL namespace) — stable point ids derived from `path#index`. */
-export function uuidV5(name: string): string {
-  const ns = Buffer.from('6ba7b8119dad11d180b400c04fd430c8', 'hex')
-  const h = crypto.createHash('sha1').update(ns).update(name).digest()
-  h[6] = (h[6] & 0x0f) | 0x50
-  h[8] = (h[8] & 0x3f) | 0x80
-  const x = h.subarray(0, 16).toString('hex')
-  return `${x.slice(0, 8)}-${x.slice(8, 12)}-${x.slice(12, 16)}-${x.slice(16, 20)}-${x.slice(20)}`
-}
+export { uuidV5 }
 
 export function parseNote(slug: string, markdown: string): Chunk[] {
   const tags = markdown.match(/^tags:\s*\[(.*)\]/m)?.[1].split(',').map((t) => t.trim()).filter(Boolean) ?? []
