@@ -4,8 +4,8 @@ import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
 import sharp, { type Sharp } from 'sharp'
-import { embedImages } from '../shared/embed.ts'
-import { DATASETS_DIR, QUICK } from '../shared/paths.ts'
+import { MODELS, TRANSFORMERS_VERSION, embedImages } from '../shared/embed.ts'
+import { DATASETS_DIR, EXAMPLES_DIR, QUICK } from '../shared/paths.ts'
 
 const URL = 'https://s3.amazonaws.com/fast-ai-imageclas/imagenette2-160.tgz'
 const DIR = path.join(DATASETS_DIR, 'p2')
@@ -94,7 +94,15 @@ export async function loadImages(): Promise<Image[]> {
 
 /** CLIP embeddings for all images, cached on disk (raw, unnormalized, 512-d). */
 export async function loadEmbeddings(images: Image[]): Promise<number[][]> {
-  const cache = path.join(DIR, `clip-${images.length}.f32`)
+  // Keyed by everything that shapes the vectors (model, embedding code, library version) and by
+  // the ordered image list, so a change never silently reuses vectors from an older pipeline.
+  const key = crypto
+    .createHash('sha1')
+    .update(JSON.stringify([MODELS.clip, TRANSFORMERS_VERSION, images.map((im) => im.file)]))
+    .update(fs.readFileSync(path.join(EXAMPLES_DIR, 'shared', 'embed.ts')))
+    .digest('hex')
+    .slice(0, 12)
+  const cache = path.join(DIR, `clip-${images.length}-${key}.f32`)
   if (fs.existsSync(cache)) {
     const flat = new Float32Array(fs.readFileSync(cache).buffer.slice(0))
     return images.map((_, i) => Array.from(flat.subarray(i * 512, (i + 1) * 512)))
