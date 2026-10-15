@@ -140,6 +140,15 @@ Recall depends on your data and `hnsw_ef`. On synthetic clustered data, recall@1
 case for any ANN index, so measure on your own embeddings with
 `cargo run --release -p neoquadrant --example bench`.
 
+## Examples
+
+[`examples/`](examples) holds five retrieval projects that use neoquadrant like an outside Node.js app
+would, with real datasets and local CPU embedding models: notes search, image similarity and
+near-duplicates (CLIP), duplicate-question detection, code search with incremental git sync, and
+hybrid (dense + BM25) document search. Each experiment checks its own claims; `npm run e2e` runs
+them all. Results are in [examples/README.md](examples/README.md), and the bugs, limitations and
+surprises found while building them are in [examples/FINDINGS.md](examples/FINDINGS.md).
+
 ## Building from source
 
 ```bash
@@ -178,6 +187,7 @@ crates/neoquadrant/     core: Database, Collection, requests (JSON API), backgro
 bindings/node/          napi-rs native module + JS wrapper (index.js) + TypeScript types
 bindings/python/        PyO3 native module + Python wrapper + type stubs
 tests/conformance/      shared cross-language behaviour spec
+examples/               five end-to-end retrieval projects (Node.js), results and FINDINGS.md
 patches/                changes to vendored Qdrant
 vendor/qdrant/          Qdrant source (git submodule, v1.19.2)
 ```
