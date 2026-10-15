@@ -5,12 +5,15 @@ import { execFileSync } from 'node:child_process'
 import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import type { Collection, Database, Filter, PointId, ScoredPoint } from 'neoquadrant'
 import { chunks as batches } from '../shared/db.ts'
-import { embedCode, embedPassages, embedQuery } from '../shared/embed.ts'
+import { MODELS, embedCode, embedPassages, embedQuery } from '../shared/embed.ts'
 import { uuidV5 } from '../shared/ids.ts'
 import { DATASETS_DIR, EXAMPLES_DIR, QUICK } from '../shared/paths.ts'
 import { type CodeChunk, chunkFile, languageOf } from './chunk.ts'
+
+const HERE = path.dirname(fileURLToPath(import.meta.url))
 
 export const CODE = 'code'
 export const META = 'meta'
@@ -122,6 +125,19 @@ export interface Embedder {
 }
 export const defaultEmbedder: Embedder = { nl: (t) => embedPassages(t, 16), code: (t) => embedCode(t, 4) }
 
+/**
+ * Fingerprint of everything that shapes the stored chunks and vectors: the models, and the source
+ * of the chunker and of this file (which defines the embedded text). Any change forces a full
+ * rebuild instead of mixing old vectors with a new query embedder or chunker.
+ */
+let pipeline: string | undefined
+export function pipelineVersion(): string {
+  if (pipeline) return pipeline
+  const h = crypto.createHash('sha1').update(JSON.stringify([MODELS.text, MODELS.code, MAX_EMBED_CHARS]))
+  for (const f of ['chunk.ts', 'lib.ts']) h.update(fs.readFileSync(path.join(HERE, f)))
+  return (pipeline = h.digest('hex').slice(0, 16))
+}
+
 export interface SyncStats {
   repo: string
   mode: 'full' | 'incremental' | 'unchanged'
@@ -174,7 +190,7 @@ export async function syncRepo(code: Collection, meta: Collection, repo: RepoSpe
   const metaId = uuidV5(`repo:${repo.name}`)
   const state = meta.retrieve([metaId])[0]?.payload
   // What was indexed, not just where: a commit indexed with other paths (e.g. --quick) is not reusable.
-  const scope = JSON.stringify({ include: repo.include, exclude: repo.exclude?.source ?? null })
+  const scope = JSON.stringify({ include: repo.include, exclude: repo.exclude?.source ?? null, pipeline: pipelineVersion() })
   const last = state?.scope === scope ? ((state.commit as string | undefined) ?? null) : null
   const to = head(repo)
   const stats: SyncStats = { repo: repo.name, mode: 'full', from: last, to, files_indexed: 0, files_deleted: 0, chunks_embedded: 0, chunks_kept: 0, chunks_deleted: 0, chunks_total: 0, seconds: 0 }
